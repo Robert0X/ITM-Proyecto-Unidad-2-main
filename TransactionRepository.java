@@ -23,6 +23,21 @@ public class TransactionRepository {
         return null;
     }
 
+    public static void updateTransaction(String id, Transaction updatedTransaction) {
+        for (Transaction transaction : transactions) {
+            if (transaction.getId().equals(id)) {
+                int index = transactions.indexOf(transaction);
+                transactions.set(index, updatedTransaction);
+                return;
+            }
+        }
+        System.out.println("Transaction not found");
+    }
+
+    public static void deleteTransaction(Transaction transaction) {
+        transactions.remove(transaction);
+    }
+
     public static List<Transaction> getTransactionsByBook(Book book) {
         List<Transaction> bookTransactions = new ArrayList<>();
         for (Transaction transaction : transactions) {

@@ -28,4 +28,8 @@ public class Administrator extends User {
     public void setSuperAdmin(boolean superAdmin) {
         isSuperAdmin = superAdmin;
     }
+
+    public boolean hasPermission(Permission permission) {
+        return permissions.contains(permission);
+    }
 }

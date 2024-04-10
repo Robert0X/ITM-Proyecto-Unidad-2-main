@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
@@ -218,7 +220,7 @@ public class LibraryApplication {
                     + book.getAuthor().getProfile().getName());
         }
     }
---
+
     private static void showClientMenu(Administrator admin) {
         if (!admin.hasPermission(Permission.READ)) {
             System.out.println("You don't have permission to manage clients.");
@@ -271,6 +273,16 @@ public class LibraryApplication {
         }
     }
 
+    public static Date parseStringToDate(String dateString) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return formatter.parse(dateString);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please use dd/MM/yyyy.");
+            return null;
+        }
+    }
+
     private static void addClient() {
         System.out.println("Enter client first name: ");
         String firstName = scanner.nextLine();
@@ -278,7 +290,7 @@ public class LibraryApplication {
         String lastName = scanner.nextLine();
         System.out.println("Enter birth date (dd/mm/yyyy): ");
         String birthStr = scanner.nextLine();
-        Date birthDate = parseStringToDate(birthStr);
+        Date birthDate = LibraryApplication.parseStringToDate(birthStr);
         System.out.println("Enter username: ");
         String username = scanner.nextLine();
         System.out.println("Enter password: ");
@@ -288,7 +300,7 @@ public class LibraryApplication {
         ClientRepository.createClient(client);
         System.out.println("Client added successfully!");
     }
-    
+
     private static void updateClient() {
         System.out.print("Enter client ID to update: ");
         String id = scanner.nextLine();
@@ -309,7 +321,7 @@ public class LibraryApplication {
         ClientRepository.updateClient(id, existingClient);
         System.out.println("Client updated successfully!");
     }
-    
+
     private static void deleteClient() {
         System.out.print("Enter client ID to delete: ");
         String id = scanner.nextLine();
@@ -325,14 +337,14 @@ public class LibraryApplication {
         ClientRepository.deleteClient(client);
         System.out.println("Client deleted successfully!");
     }
-    
+
     private static void listAllClients() {
         List<Client> allClients = ClientRepository.getAllClients();
         for (Client client : allClients) {
-            System.out.println("ID: " + client.getId() + ", Name: " + client.getProfile().getName() + ", Last Name: " + client.getProfile().getLastName() + ", Birth Date: " + client.getProfile().getBirthdate());
+            System.out.println("ID: " + client.getId() + ", Name: " + client.getProfile().getName() + ", Last Name: "
+                    + client.getProfile().getLastName() + ", Birth Date: " + client.getProfile().getBirthdate());
         }
     }
-    
 
     private static void showAuthorMenu(Administrator admin) {
         if (!admin.hasPermission(Permission.READ)) {
@@ -385,6 +397,7 @@ public class LibraryApplication {
             }
         }
     }
+
     private static void addAuthor() {
         System.out.println("Enter author first name: ");
         String firstName = scanner.nextLine();
@@ -398,7 +411,7 @@ public class LibraryApplication {
         AuthorRepository.createAuthor(author);
         System.out.println("Author added successfully!");
     }
-    
+
     private static void updateAuthor() {
         System.out.print("Enter author ID to update: ");
         String id = scanner.nextLine();
@@ -419,7 +432,7 @@ public class LibraryApplication {
         AuthorRepository.updateAuthor(id, existingAuthor);
         System.out.println("Author updated successfully!");
     }
-    
+
     private static void deleteAuthor() {
         System.out.print("Enter author ID to delete: ");
         String id = scanner.nextLine();
@@ -434,13 +447,14 @@ public class LibraryApplication {
         }
         AuthorRepository.deleteAuthor(author);
     }
-    
+
     private static void listAllAuthors() {
         List<Author> allAuthors = AuthorRepository.getAllAuthors();
         for (Author author : allAuthors) {
             System.out.println(author.getProfile().getName());
         }
     }
+
     private static void showTransactionMenu(Administrator admin) {
         if (!admin.hasPermission(Permission.READ)) {
             System.out.println("You don't have permission to manage transactions.");
@@ -492,6 +506,7 @@ public class LibraryApplication {
             }
         }
     }
+
     private static void addTransaction() {
         System.out.print("Enter client ID: ");
         String clientId = scanner.nextLine();
@@ -515,7 +530,7 @@ public class LibraryApplication {
         TransactionRepository.logTransaction(transaction);
         System.out.println("Transaction added successfully!");
     }
-    
+
     private static TransactionType getTransactionType() {
         System.out.println("Select transaction type:");
         System.out.println("1. Borrow");
@@ -531,7 +546,7 @@ public class LibraryApplication {
                 return null;
         }
     }
-    
+
     private static void updateTransaction() {
         System.out.print("Enter transaction ID to update: ");
         String id = scanner.nextLine();
@@ -562,7 +577,7 @@ public class LibraryApplication {
         TransactionRepository.updateTransaction(id, updatedTransaction);
         System.out.println("Transaction updated successfully!");
     }
-    
+
     private static void deleteTransaction() {
         System.out.print("Enter transaction ID to delete: ");
         String id = scanner.nextLine();
@@ -574,13 +589,16 @@ public class LibraryApplication {
         TransactionRepository.deleteTransaction(transaction);
         System.out.println("Transaction deleted successfully!");
     }
-    
+
     private static void listAllTransactions() {
         List<Transaction> allTransactions = TransactionRepository.getAllTransactions();
         for (Transaction transaction : allTransactions) {
-            System.out.println("ID: " + transaction.getId() + ", Type: " + transaction.getType() + ", Client: " + transaction.getClient().getProfile().getName() + ", Book: " + transaction.getBook().getTitle() + ", Date: " + transaction.getDate());
+            System.out.println("ID: " + transaction.getId() + ", Type: " + transaction.getType() + ", Client: "
+                    + transaction.getClient().getProfile().getName() + ", Book: " + transaction.getBook().getTitle()
+                    + ", Date: " + transaction.getDate());
         }
     }
+
     private static void listAvailableBooks() {
         System.out.println("Available books:");
         for (Book book : books) {
